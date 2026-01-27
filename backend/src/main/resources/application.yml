@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/foodflow
+    username: foodflow
+    password: foodflow
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

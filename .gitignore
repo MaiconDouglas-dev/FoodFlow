@@ -43,12 +43,13 @@ build/
 *.iml
 
 # Maven/Java
-target/
-*.log
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Env
-.env
+# Logs
+*.log
+
