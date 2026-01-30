@@ -1,7 +1,8 @@
 # FoodFlow
-FoodFlow: sistema de delivery (no estilo iFood) para praticar Java/Spring com foco em arquitetura e regras de negócio. Inclui pedidos com state machine, precificação/cupom, pagamentos (idempotência), eventos (Pub/Sub), Postgres+Flyway, testes (JUnit/Testcontainers), Docker e painel admin React.
 
-# FoodFlow
+**FoodFlow** é um sistema de delivery (estilo iFood) criado para praticar **Java + Spring** com foco em **arquitetura**, **domínio rico** e **regras de negócio**.  
+O projeto está sendo construído por etapas (“Dias”), com evolução incremental e testes garantindo segurança nas mudanças.
+
 
 Projeto **Full Stack** (em evolução).  
 Nesta primeira etapa (Dia 1), o foco foi montar um **setup profissional local** do backend com:
@@ -24,21 +25,47 @@ Nesta primeira etapa (Dia 1), o foco foi montar um **setup profissional local** 
 
 ---
 
+## ✅ Status atual — Dia 2 (Domínio de Pedidos e Regras de Negócio)
+
+Nesta etapa foi implementado o **domínio de pedidos** com:
+
+- Agregado de domínio **Order**
+- **State machine** de status no próprio domínio (transições + guards)
+- Enum **OrderStatus** com os estados do pedido
+- Erros de domínio padronizados com **BusinessException + BusinessErrorCode**
+- Testes unitários cobrindo cenários **válidos** e **inválidos**
+- `./mvnw test` executando com sucesso
+
+---
+
+## 🎯 Objetivo do projeto (em evolução)
+
+- Pedidos com **state machine**
+- Precificação e cupons
+- Pagamentos (idempotência)
+- Eventos (Pub/Sub)
+- PostgreSQL + Flyway
+- Testes (JUnit + Testcontainers)
+- Docker
+- Painel admin (React)
+
 ## 🧰 Stack
 
-**Backend**
+### Backend
 - Java 21
 - Spring Boot 4.x
 - Spring Data JPA
 - Flyway (migrations)
-- Spring Boot Actuator
+- Actuator
 
-**Database**
+### Database
 - PostgreSQL 16 (Docker)
 
-**Testes**
-- JUnit + Spring Boot Test
+### Testes
+- JUnit 5
+- Spring Boot Test
 - Testcontainers (PostgreSQL 16)
+
 
 ---
 
@@ -46,23 +73,9 @@ Nesta primeira etapa (Dia 1), o foco foi montar um **setup profissional local** 
 
 ```txt
 FoodFlow/
-  backend/                 # Spring Boot backend
+  backend/                 # Backend Spring Boot
   docker-compose.yml       # PostgreSQL local
   README.md
   docs/                    # (opcional) logs/decisões/erros e acertos
 
 ```
-✅ Status (Dia 2 — Domínio de Pedidos e Regras de Negócio)
-Pronto:
-
-- Implementado o agregado de domínio `Order` (pedido) com **state machine**
-- Criado enum `OrderStatus` com estados do pedido (DRAFT, CONFIRMED, PAID, SHIPPED, DELIVERED, CANCELED)
-- Regras de transição aplicadas no próprio domínio (guards / invariantes)
-- Criada exceção de domínio `BusinessException` com `BusinessErrorCode`
-  - Erros padronizados para evoluir para respostas REST no futuro
-- Testes unitários (JUnit) cobrindo transições válidas e inválidas
-- `mvn test` continua executando com sucesso
-
-🔜 Próximo (Dia 3 — API e tratamento de erros)
-- Criar endpoints REST para pedidos
-- Implementar `@RestControllerAdvice` para mapear BusinessException -> JSON (code/message/details)
