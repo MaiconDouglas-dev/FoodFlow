@@ -1,5 +1,6 @@
 package com.foodflow.domain.order;
 
+import com.foodflow.domain.order.exception.BusinessErrorCode;
 import com.foodflow.domain.order.exception.BusinessException;
 import org.junit.jupiter.api.Test;
 
@@ -8,20 +9,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderTest {
 
     @Test
-    void newOrder_startsAsDraft() {
+    void novoPedido_iniciaEmDraft() {
         Order order = Order.create();
         assertEquals(OrderStatus.DRAFT, order.getStatus());
     }
 
     @Test
-    void canConfirm_fromDraft() {
+    void podeConfirmar_aPartirDeDraft() {
         Order order = Order.create();
         order.confirm();
         assertEquals(OrderStatus.CONFIRMED, order.getStatus());
     }
 
     @Test
-    void canShip_onlyAfterConfirmed() {
+    void podeEnviar_apenasAposConfirmado() {
         Order order = Order.create();
         order.confirm();
         order.ship();
@@ -29,7 +30,7 @@ class OrderTest {
     }
 
     @Test
-    void canDeliver_onlyAfterShipped() {
+    void podeEntregar_apenasAposEnviado() {
         Order order = Order.create();
         order.confirm();
         order.ship();
@@ -38,26 +39,31 @@ class OrderTest {
     }
 
     @Test
-    void cannotShip_whenNotConfirmed() {
+    void naoPodeEnviar_quandoNaoConfirmado() {
         Order order = Order.create();
+
         BusinessException ex = assertThrows(BusinessException.class, order::ship);
-        assertTrue(ex.getMessage().contains("Only CONFIRMED orders can be shipped"));
+
+        assertEquals(BusinessErrorCode.ORDER_INVALID_STATUS_TRANSITION, ex.getCode());
+        assertTrue(ex.getMessage().contains("Status atual: DRAFT"));
     }
 
     @Test
-    void cancel_fromDraft_isOk() {
+    void cancelar_emDraft_ok() {
         Order order = Order.create();
         order.cancel();
         assertEquals(OrderStatus.CANCELED, order.getStatus());
     }
 
     @Test
-    void cancel_afterShipped_throws() {
+    void cancelar_aposEnviado_deveFalhar() {
         Order order = Order.create();
         order.confirm();
         order.ship();
 
         BusinessException ex = assertThrows(BusinessException.class, order::cancel);
-        assertTrue(ex.getMessage().contains("Cannot cancel"));
+
+        assertEquals(BusinessErrorCode.ORDER_CANNOT_CANCEL, ex.getCode());
+        assertTrue(ex.getMessage().contains("status: SHIPPED"));
     }
 }
