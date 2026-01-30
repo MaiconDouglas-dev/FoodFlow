@@ -50,3 +50,19 @@ FoodFlow/
   docker-compose.yml       # PostgreSQL local
   README.md
   docs/                    # (opcional) logs/decisões/erros e acertos
+
+```
+✅ Status (Dia 2 — Domínio de Pedidos e Regras de Negócio)
+Pronto:
+
+- Implementado o agregado de domínio `Order` (pedido) com **state machine**
+- Criado enum `OrderStatus` com estados do pedido (DRAFT, CONFIRMED, PAID, SHIPPED, DELIVERED, CANCELED)
+- Regras de transição aplicadas no próprio domínio (guards / invariantes)
+- Criada exceção de domínio `BusinessException` com `BusinessErrorCode`
+  - Erros padronizados para evoluir para respostas REST no futuro
+- Testes unitários (JUnit) cobrindo transições válidas e inválidas
+- `mvn test` continua executando com sucesso
+
+🔜 Próximo (Dia 3 — API e tratamento de erros)
+- Criar endpoints REST para pedidos
+- Implementar `@RestControllerAdvice` para mapear BusinessException -> JSON (code/message/details)
